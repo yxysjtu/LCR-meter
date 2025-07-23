@@ -10,11 +10,7 @@ int btn_state = 0;
 uint16_t adc0_buffer[SAMPLE_LEN];
 uint16_t adc1_buffer[SAMPLE_LEN];
 bool adc_start = false;
-uint32_t test_freq = 10000;
-
-float R_ref = 1000;
-float R, X, G, B;
-float L, C, Q, D;
+uint32_t test_freq = 3000;
 
 void start_measure(uint8_t *data, size_t size){
 	test_freq = *(uint32_t *)data;
@@ -26,25 +22,6 @@ void start_measure(uint8_t *data, size_t size){
 	adc_start = true;
 }
 
-void calc_Z(){
-	float sin_val, cos_val;
-	my_sin_cos(phase_diff, &sin_val, &cos_val);
-	float z_mag = R_ref * amp_div;
-	float y_mag = 1 / z_mag;
-	R = z_mag * cos_val;
-	X = z_mag * sin_val;
-	G = y_mag * cos_val;
-	B = y_mag * (-sin_val);
-
-	L = X / (2 * PI * test_freq);
-	Q = X / R;
-//	C = B / (2 * PI * test_freq);
-//	D = B / G;
-	C = 1 / X / (2 * PI * test_freq);
-	D = 1 / Q;
-
-}
-
 extern "C" void setup(){
 	//adc_dut.read_dma(adc0_buffer, SAMPLE_LEN);
 	seracc_init();
@@ -53,6 +30,13 @@ extern "C" void setup(){
 
 
 extern "C" void loop(){
+//	arm_sin_cos_f32(phase, &pSinVal, &pCosVal);
+//	arm_atan2_f32(atan_input, 1, &atan_output);
+//	ui_led[0].toggle_pin();
+//	HAL_Delay(500);
+//	ui_led[0].set_pin(ui_sw3.read_pin());
+//	btn_state = ui_sw3.read_pin();
+//	if(btn.get_pressed_state()) ui_led[0].toggle_pin();
 
 	if(btn.get_pressed_state()){
 		if(!adc_dut.busy && !adc_ref.busy){
@@ -65,11 +49,18 @@ extern "C" void loop(){
 		}
 	}
 	if(adc_start && !adc_dut.busy){
+
+//		calc_amp_phase((int16_t*)adc0_buffer, (int16_t*)adc1_buffer, test_freq);
+//		adc_start = false;
+//
 		adc_start = false;
 		calc_amp_phase((int16_t*)adc0_buffer, (int16_t*)adc1_buffer, test_freq);
 		seracc_transmit((uint8_t*)&adc0_amp, 4);
 		seracc_transmit((uint8_t*)&adc1_amp, 4);
 		seracc_transmit((uint8_t*)&phase_diff, 4);
+
+//		seracc_transmit((uint8_t*)adc0_buffer, 2 * SAMPLE_LEN);
+//		seracc_transmit((uint8_t*)adc1_buffer, 2 * SAMPLE_LEN);
 
 		ui_led[0].toggle_pin();
 

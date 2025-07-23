@@ -8,8 +8,8 @@ GPIO ui_led[4] = {GPIO(UI_LED0_GPIO_Port, UI_LED0_Pin),
 GPIO ui_sw3(UI_SW3_GPIO_Port, UI_SW3_Pin);
 Button btn(ui_sw3, true);
 
-ADC adc_dut(&hadc1);
-ADC adc_ref(&hadc2);
+ADC adc_dut(&hadc1, &htim6);
+ADC adc_ref(&hadc2, &htim6);
 
 UART serial(&huart5);
 

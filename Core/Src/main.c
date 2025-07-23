@@ -100,15 +100,16 @@ int main(void)
   MX_TIM6_Init();
   MX_ADC1_Init();
   MX_ADC2_Init();
-  MX_TIM1_Init();
   MX_UART5_Init();
   MX_CRC_Init();
   MX_USART2_Init();
   MX_SPI4_Init();
   MX_TIM4_Init();
+  MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim6);
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+  HAL_TIM_Base_Start(&htim15);
+  HAL_TIM_PWM_Start(&htim15, TIM_CHANNEL_1);
   setup();
 
   /* USER CODE END 2 */
