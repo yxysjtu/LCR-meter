@@ -2,7 +2,7 @@
 #define DEVICE_H
 
 #include "bsp.h"
-
+#include "dds.h"
 #include "button.h"
 //#include "dds.h"
 //#include "eeprom.h"
@@ -23,7 +23,7 @@ extern ADC adc_dut;
 extern ADC adc_ref;
 
 extern UART serial;
-
+extern AD9834 dds;
 //extern DDS dds0;
 //extern EEPROM eeprom;
 //extern Adafruit_ST7789 lcd;

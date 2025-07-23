@@ -13,6 +13,10 @@ ADC adc_ref(&hadc2, &htim6);
 
 UART serial(&huart5);
 
+SPI AD9834_spi(&hspi4);
+AD9834 dds(AD9834_spi,25);
+
+
 extern "C" void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
 	if(hadc == adc_dut.hadc){
