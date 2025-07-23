@@ -34,6 +34,7 @@ extern "C" {
 #define SERACC_HUART huart5
 #define SERACC_HDMA hdma_uart5_rx
 #include "seracc.h"
+extern SPI_HandleTypeDef hspi4;
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -59,10 +60,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define UI_SEG2_Pin GPIO_PIN_2
-#define UI_SEG2_GPIO_Port GPIOE
-#define UI_SEG3_Pin GPIO_PIN_3
-#define UI_SEG3_GPIO_Port GPIOE
+#define DDS_CS_Pin GPIO_PIN_3
+#define DDS_CS_GPIO_Port GPIOE
 #define UI_SEG4_Pin GPIO_PIN_4
 #define UI_SEG4_GPIO_Port GPIOE
 #define UI_SW3_Pin GPIO_PIN_13

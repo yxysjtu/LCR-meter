@@ -32,8 +32,12 @@
 
 /* USER CODE END 1 */
 
-/** Configure pins
-     PF10   ------> SPI2_SCK
+/** Configure pins as
+        * Analog
+        * Input
+        * Output
+        * EVENT_OUT
+        * EXTI
      PA8   ------> RCC_MCO
 */
 void MX_GPIO_Init(void)
@@ -50,8 +54,7 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, UI_SEG2_Pin|UI_SEG3_Pin|UI_SEG4_Pin|UI_SEG0_Pin
-                          |UI_SEG1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, DDS_CS_Pin|UI_SEG4_Pin|UI_SEG0_Pin|UI_SEG1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOF, LCD_DC_Pin|LCD_RES_Pin, GPIO_PIN_RESET);
@@ -68,10 +71,8 @@ void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(UI_LED3_GPIO_Port, UI_LED3_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : UI_SEG2_Pin UI_SEG3_Pin UI_SEG4_Pin UI_SEG0_Pin
-                           UI_SEG1_Pin */
-  GPIO_InitStruct.Pin = UI_SEG2_Pin|UI_SEG3_Pin|UI_SEG4_Pin|UI_SEG0_Pin
-                          |UI_SEG1_Pin;
+  /*Configure GPIO pins : DDS_CS_Pin UI_SEG4_Pin UI_SEG0_Pin UI_SEG1_Pin */
+  GPIO_InitStruct.Pin = DDS_CS_Pin|UI_SEG4_Pin|UI_SEG0_Pin|UI_SEG1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -88,14 +89,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-
-  /*Configure GPIO pin : PF10 */
-  GPIO_InitStruct.Pin = GPIO_PIN_10;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF5_SPI2;
   HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pins : UI_LED0_Pin LCD_CS_Pin */
@@ -116,7 +109,7 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pin = GPIO_PIN_8;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
   GPIO_InitStruct.Alternate = GPIO_AF0_MCO;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 

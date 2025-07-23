@@ -12,8 +12,9 @@ uint16_t adc1_buffer[SAMPLE_LEN];
 bool adc_start = false;
 
 extern "C" void setup(){
-	//adc_dut.read_dma(adc0_buffer, SAMPLE_LEN);
-	//seracc_init();
+	dds.set_freq(1 * 1e6f);
+	adc_dut.read_dma(adc0_buffer, SAMPLE_LEN);
+	seracc_init();
 }
 
 
@@ -25,6 +26,7 @@ extern "C" void loop(){
 //	ui_led[0].set_pin(ui_sw3.read_pin());
 //	btn_state = ui_sw3.read_pin();
 //	if(btn.get_pressed_state()) ui_led[0].toggle_pin();
+
 
 	if(btn.get_pressed_state()){
 		if(!adc_dut.busy && !adc_ref.busy){

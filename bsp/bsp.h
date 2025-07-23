@@ -6,7 +6,7 @@
 #include "gpio.h"
 #include "adc.h"
 #include "uart.h"
-//#include "spi.h"
+#include "spi.h"
 //#include "i2c.h"
 //#include "timer.h"
 //#include "dma.h"
