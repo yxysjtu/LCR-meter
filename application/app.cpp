@@ -2,19 +2,22 @@
 #include "app.h"
 #include "filter.h"
 
-//float pSinVal, pCosVal;
-//float phase = 0;
-//float atan_input = 0, atan_output;
-int btn_state = 0;
+
 #define SAMPLE_LEN 10000
 uint16_t adc0_buffer[SAMPLE_LEN];
 uint16_t adc1_buffer[SAMPLE_LEN];
-bool adc_start = false;
 uint32_t test_freq = 10000;
+int measure_state = 0;
+
+float V_dut, V_ref;
+float V_div;
 
 float R_ref = 1000;
+float dut_gain = 1;
+
 float R, X, G, B;
-float L, C, Q, D;
+float L, C_s, Q, D;
+float C_p;
 
 void start_measure(uint8_t *data, size_t size){
 	test_freq = *(uint32_t *)data;
@@ -23,13 +26,20 @@ void start_measure(uint8_t *data, size_t size){
 	adc_dut.start_conversion_dma(adc0_buffer, SAMPLE_LEN);
 	adc_ref.start_conversion_dma(adc1_buffer, SAMPLE_LEN);
 	adc_dut.timer_start();
-	adc_start = true;
+
+	measure_state = 1;
+}
+
+void get_V(){
+	V_ref = adc1_amp;
+	V_dut = adc0_amp / dut_gain;
+	V_div = V_dut / V_ref;
 }
 
 void calc_Z(){
 	float sin_val, cos_val;
 	my_sin_cos(phase_diff, &sin_val, &cos_val);
-	float z_mag = R_ref * amp_div;
+	float z_mag = R_ref * V_div;
 	float y_mag = 1 / z_mag;
 	R = z_mag * cos_val;
 	X = z_mag * sin_val;
@@ -38,9 +48,9 @@ void calc_Z(){
 
 	L = X / (2 * PI * test_freq);
 	Q = X / R;
-//	C = B / (2 * PI * test_freq);
+	C_p = B / (2 * PI * test_freq);
 //	D = B / G;
-	C = 1 / X / (2 * PI * test_freq);
+	C_s = 1 / X / (2 * PI * test_freq);
 	D = 1 / Q;
 
 }
@@ -52,29 +62,73 @@ extern "C" void setup(){
 }
 
 
+
 extern "C" void loop(){
+	switch(measure_state){
+		case 0:{//等待被触发
+			if(btn.get_pressed_state()){
+				if(!adc_dut.busy && !adc_ref.busy){
+					ui_led[0].toggle_pin();
+					adc_dut.timer_stop();
+					adc_dut.start_conversion_dma(adc0_buffer, SAMPLE_LEN);
+					adc_ref.start_conversion_dma(adc1_buffer, SAMPLE_LEN);
+					adc_dut.timer_start();
 
-	if(btn.get_pressed_state()){
-		if(!adc_dut.busy && !adc_ref.busy){
-			adc_start = true;
-			ui_led[0].toggle_pin();
-			adc_dut.timer_stop();
-			adc_dut.start_conversion_dma(adc0_buffer, SAMPLE_LEN);
-			adc_ref.start_conversion_dma(adc1_buffer, SAMPLE_LEN);
-			adc_dut.timer_start();
-		}
+					measure_state = 1;
+				}
+			}
+		}break;
+		case 1:{
+			if(!adc_dut.busy){
+				ui_led[0].toggle_pin();
+				calc_amp_phase((int16_t*)adc0_buffer, (int16_t*)adc1_buffer, test_freq);
+				get_V();
+				//根据幅度和频率进行估计，调整参考电阻和pga
+
+				//下一次测量
+				ui_led[0].toggle_pin();
+				adc_dut.timer_stop();
+				adc_dut.start_conversion_dma(adc0_buffer, SAMPLE_LEN);
+				adc_ref.start_conversion_dma(adc1_buffer, SAMPLE_LEN);
+				adc_dut.timer_start();
+
+				measure_state = 2;
+			}
+		}break;
+		case 2:{
+			if(!adc_dut.busy){
+				ui_led[0].toggle_pin();
+				calc_amp_phase((int16_t*)adc0_buffer, (int16_t*)adc1_buffer, test_freq);
+				get_V();
+				calc_Z();
+				//发送给上位机
+
+				measure_state = 0;
+			}
+		}break;
 	}
-	if(adc_start && !adc_dut.busy){
-		adc_start = false;
-		calc_amp_phase((int16_t*)adc0_buffer, (int16_t*)adc1_buffer, test_freq);
-		//calc_Z();
-		seracc_transmit((uint8_t*)&adc0_amp, 4);
-		seracc_transmit((uint8_t*)&adc1_amp, 4);
-		seracc_transmit((uint8_t*)&phase_diff, 4);
 
-		ui_led[0].toggle_pin();
-
-	}
+//	if(btn.get_pressed_state()){
+//		if(!adc_dut.busy && !adc_ref.busy){
+//			adc_start = true;
+//			ui_led[0].toggle_pin();
+//			adc_dut.timer_stop();
+//			adc_dut.start_conversion_dma(adc0_buffer, SAMPLE_LEN);
+//			adc_ref.start_conversion_dma(adc1_buffer, SAMPLE_LEN);
+//			adc_dut.timer_start();
+//		}
+//	}
+//	if(adc_start && !adc_dut.busy){
+//		adc_start = false;
+//		calc_amp_phase((int16_t*)adc0_buffer, (int16_t*)adc1_buffer, test_freq);
+//		get_V();
+//		seracc_transmit((uint8_t*)&adc0_amp, 4);
+//		seracc_transmit((uint8_t*)&adc1_amp, 4);
+//		seracc_transmit((uint8_t*)&phase_diff, 4);
+//
+//		ui_led[0].toggle_pin();
+//
+//	}
 
 }
 

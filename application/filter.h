@@ -110,7 +110,6 @@ float adc0_amp, adc1_amp;
 float adc0_amp_cali, adc1_amp_cali;
 float adc0_phase, adc1_phase;
 float phase_diff;
-float amp_div;
 
 const float amp0_10k[] = {
     31.4021912f, 63.4520874f, 94.8571701f, 126.065697f, 157.232208f, 188.593307f, 219.772369f, 251.12854f,
@@ -182,7 +181,6 @@ void calc_amp_phase(int16_t* adc0, int16_t* adc1, uint32_t freq){
 //    adc1_amp_cali = calibrate_amp(amp1_10k, adc1_amp, amp1_k, amp1_b);
 
     phase_diff = (adc1_phase - adc0_phase) / PI * 180;
-    amp_div = adc0_amp / adc1_amp;
-//    p1 = adc0_amp / adc1_amp;
-//    p2 = adc0_amp_cali / adc1_amp_cali;
+//    amp_div = adc0_amp / adc1_amp;
+
 }
