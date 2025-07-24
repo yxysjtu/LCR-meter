@@ -16,6 +16,9 @@ UART serial(&huart5);
 SPI AD9834_spi(&hspi4);
 AD9834 dds(AD9834_spi,25);
 
+GPIO s1(RELAY1_S_GPIO_Port, RELAY1_S_Pin)
+Relay
+
 
 extern "C" void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {

@@ -67,6 +67,7 @@ extern "C" void loop(){
 	if(adc_start && !adc_dut.busy){
 		adc_start = false;
 		calc_amp_phase((int16_t*)adc0_buffer, (int16_t*)adc1_buffer, test_freq);
+		//calc_Z();
 		seracc_transmit((uint8_t*)&adc0_amp, 4);
 		seracc_transmit((uint8_t*)&adc1_amp, 4);
 		seracc_transmit((uint8_t*)&phase_diff, 4);

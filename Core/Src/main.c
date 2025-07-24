@@ -21,7 +21,6 @@
 #include "adc.h"
 #include "cordic.h"
 #include "crc.h"
-#include "dac.h"
 #include "dma.h"
 #include "spi.h"
 #include "tim.h"
@@ -95,7 +94,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_DAC1_Init();
   MX_CORDIC_Init();
   MX_TIM6_Init();
   MX_ADC1_Init();
@@ -122,7 +120,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	  //loop();
+	  loop();
   }
   /* USER CODE END 3 */
 }
