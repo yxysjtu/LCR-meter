@@ -87,4 +87,10 @@ extern "C" void task_handler(){
 		ui_led[1].toggle_pin();
 	}
 	btn.task_handler();
+	relay1.task_handler();
+	relay2.task_handler();
+	relay3.task_handler();
+	relay4.task_handler();
+	relay5.task_handler();
+	relay6.task_handler();
 }

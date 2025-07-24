@@ -6,8 +6,21 @@ public:
 	GPIO& set;
 	GPIO& reset;
 	//bool state = false;
-
 	Relay(GPIO& set, GPIO& reset) : set(set), reset(reset) {}
+
+	void on_blocking(){
+		set.set_pin(1);
+		set_state = 1;
+		HAL_Delay(debounce_delay);
+		set_state = 0;
+	}
+
+	void off_blocking(){
+		reset.set_pin(1);
+		reset_state = 1;
+		HAL_Delay(debounce_delay);
+		reset_state = 0;
+	}
 
 	void on(){
 		set.set_pin(1);
@@ -51,6 +64,7 @@ private:
 	int set_state = 0;
 	int reset_state = 0;
 	int debounce_tick = 0;
+
 //	int prev_state = 0;
 //	bool pullup;
 //	bool pressed = false;

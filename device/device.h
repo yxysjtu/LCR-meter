@@ -4,6 +4,7 @@
 #include "bsp.h"
 #include "dds.h"
 #include "button.h"
+#include "relay.h"
 //#include "dds.h"
 //#include "eeprom.h"
 //#include "lcd.h"
@@ -24,6 +25,13 @@ extern ADC adc_ref;
 
 extern UART serial;
 extern AD9834 dds;
+
+extern Relay relay1;
+extern Relay relay2;
+extern Relay relay3;
+extern Relay relay4;
+extern Relay relay5;
+extern Relay relay6;
 //extern DDS dds0;
 //extern EEPROM eeprom;
 //extern Adafruit_ST7789 lcd;
