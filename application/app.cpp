@@ -55,8 +55,74 @@ void calc_Z(){
 
 }
 
+enum gain_e{
+	GAIN_1 = 1,
+	GAIN_10 = 10,
+	GAIN_100 = 100
+};
+void set_gain(gain_e gain){
+	switch(gain){
+		case GAIN_1:{//00
+			relay5.reset();
+			relay6.reset();
+			dut_gain = (float)gain;
+		}break;
+		case GAIN_10:{//10
+			relay5.set();
+			relay6.reset();
+			dut_gain = (float)gain;
+		}break;
+		case GAIN_100:{//11
+			relay5.set();
+			relay6.set();
+			dut_gain = (float)gain;
+		}break;
+		default:break;
+	}
+}
+
+enum Rref_e{
+	Rref_100 = 100,
+	Rref_1k = 1000,
+	Rref_10k = 10000,
+	Rref_100k = 100000
+};
+void set_Rref(Rref_e Rref){
+	switch(Rref){
+		case Rref_100:{
+			relay1.set_blocking();
+			relay2.reset();
+			relay3.reset();
+			relay4.reset();
+		}break;
+		case Rref_1k:{
+			relay2.set_blocking();
+			relay1.reset();
+			relay3.reset();
+			relay4.reset();
+		}break;
+		case Rref_10k:{
+			relay3.set_blocking();
+			relay2.reset();
+			relay1.reset();
+			relay4.reset();
+		}break;
+		case Rref_100k:{
+			relay4.set_blocking();
+			relay2.reset();
+			relay3.reset();
+			relay1.reset();
+		}break;
+	}
+}
+
 extern "C" void setup(){
 	//adc_dut.read_dma(adc0_buffer, SAMPLE_LEN);
+	set_gain(GAIN_1);
+	set_Rref(Rref_1k);
+
+	dds.set_freq(10000);
+
 	seracc_init();
 	seracc_register_handler("freq", start_measure);
 }
@@ -141,6 +207,7 @@ extern "C" void task_handler(){
 		ui_led[1].toggle_pin();
 	}
 	btn.task_handler();
+
 	relay1.task_handler();
 	relay2.task_handler();
 	relay3.task_handler();

@@ -3,31 +3,33 @@
 
 class Relay{
 public:
-	GPIO& set;
-	GPIO& reset;
+	GPIO& s;
+	GPIO& r;
 	//bool state = false;
-	Relay(GPIO& set, GPIO& reset) : set(set), reset(reset) {}
+	Relay(GPIO& set, GPIO& reset) : s(set), r(reset) {}
 
-	void on_blocking(){
-		set.set_pin(1);
+	void set_blocking(){
+		s.set_pin(1);
 		set_state = 1;
 		HAL_Delay(debounce_delay);
 		set_state = 0;
+		s.set_pin(0);
 	}
 
-	void off_blocking(){
-		reset.set_pin(1);
+	void reset_blocking(){
+		r.set_pin(1);
 		reset_state = 1;
 		HAL_Delay(debounce_delay);
 		reset_state = 0;
+		r.set_pin(0);
 	}
 
-	void on(){
-		set.set_pin(1);
+	void set(){
+		s.set_pin(1);
 		set_state = 1;
 	}
-	void off(){
-		reset.set_pin(1);
+	void reset(){
+		r.set_pin(1);
 		reset_state = 1;
 	}
 	void task_handler(){
@@ -41,11 +43,11 @@ public:
 				debounce_tick = 0;
 				if(reset_state == 1){
 					reset_state = 0;
-					reset.set_pin(0);
+					r.set_pin(0);
 				}
 				if(set_state == 1){
 					set_state = 0;
-					set.set_pin(0);
+					s.set_pin(0);
 				}
 				//if(state == !pullup) pressed = true;
 			}

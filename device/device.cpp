@@ -14,7 +14,8 @@ ADC adc_ref(&hadc2, &htim6);
 UART serial(&huart5);
 
 SPI AD9834_spi(&hspi4);
-AD9834 dds(AD9834_spi,25);
+GPIO DDS_CS(DDS_CS_GPIO_Port, DDS_CS_Pin);
+AD9834 dds(AD9834_spi, DDS_CS, 25);
 
 GPIO s1(RELAY1_S_GPIO_Port, RELAY1_S_Pin);
 GPIO r1(RELAY1_R_GPIO_Port, RELAY1_R_Pin);
