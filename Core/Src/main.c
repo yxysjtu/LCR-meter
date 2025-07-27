@@ -39,7 +39,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+int __io_putchar(int ch)
+{
+  ITM_SendChar(ch);
+  return ch;
+}
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/

@@ -54,7 +54,8 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOE, DDS_CS_Pin|UI_SEG4_Pin|UI_SEG0_Pin|UI_SEG1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOE, DDS_CS_Pin|UI_SEG4_Pin|ADC_RST_Pin|ADC_SER_Pin
+                          |ADC_D4_Pin|ADC_D10_Pin|UI_SEG0_Pin|UI_SEG1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOF, LCD_DC_Pin|LCD_RES_Pin, GPIO_PIN_RESET);
@@ -64,16 +65,19 @@ void MX_GPIO_Init(void)
                           |RELAY1_S_Pin|RELAY1_R_Pin|RELAY6_S_Pin|RELAY6_R_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, RELAY4_S_Pin|RELAY4_R_Pin|UI_LED3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, ADC_CVT_Pin|RELAY4_S_Pin|RELAY4_R_Pin|UI_LED3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOD, RELAY5_S_Pin|RELAY5_R_Pin|UI_LED0_Pin|LCD_CS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOD, RELAY5_S_Pin|RELAY5_R_Pin|UI_LED0_Pin|ADC_SCLK_Pin
+                          |ADC_CS_Pin|LCD_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, UI_LED1_Pin|UI_LED2_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : DDS_CS_Pin UI_SEG4_Pin UI_SEG0_Pin UI_SEG1_Pin */
-  GPIO_InitStruct.Pin = DDS_CS_Pin|UI_SEG4_Pin|UI_SEG0_Pin|UI_SEG1_Pin;
+  /*Configure GPIO pins : DDS_CS_Pin UI_SEG4_Pin ADC_RST_Pin ADC_SER_Pin
+                           ADC_D4_Pin UI_SEG0_Pin UI_SEG1_Pin */
+  GPIO_InitStruct.Pin = DDS_CS_Pin|UI_SEG4_Pin|ADC_RST_Pin|ADC_SER_Pin
+                          |ADC_D4_Pin|UI_SEG0_Pin|UI_SEG1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -101,15 +105,30 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : RELAY4_S_Pin RELAY4_R_Pin UI_LED3_Pin */
-  GPIO_InitStruct.Pin = RELAY4_S_Pin|RELAY4_R_Pin|UI_LED3_Pin;
+  /*Configure GPIO pins : ADC_D11_Pin ADC_BUY_Pin */
+  GPIO_InitStruct.Pin = ADC_D11_Pin|ADC_BUY_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : ADC_D10_Pin */
+  GPIO_InitStruct.Pin = ADC_D10_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+  HAL_GPIO_Init(ADC_D10_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : ADC_CVT_Pin RELAY4_S_Pin RELAY4_R_Pin UI_LED3_Pin */
+  GPIO_InitStruct.Pin = ADC_CVT_Pin|RELAY4_S_Pin|RELAY4_R_Pin|UI_LED3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : RELAY5_S_Pin RELAY5_R_Pin UI_LED0_Pin LCD_CS_Pin */
-  GPIO_InitStruct.Pin = RELAY5_S_Pin|RELAY5_R_Pin|UI_LED0_Pin|LCD_CS_Pin;
+  /*Configure GPIO pins : RELAY5_S_Pin RELAY5_R_Pin UI_LED0_Pin ADC_SCLK_Pin
+                           ADC_CS_Pin LCD_CS_Pin */
+  GPIO_InitStruct.Pin = RELAY5_S_Pin|RELAY5_R_Pin|UI_LED0_Pin|ADC_SCLK_Pin
+                          |ADC_CS_Pin|LCD_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -129,6 +148,12 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : ADC_D12_Pin */
+  GPIO_InitStruct.Pin = ADC_D12_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(ADC_D12_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : UI_KC0_Pin UI_KC1_Pin */
   GPIO_InitStruct.Pin = UI_KC0_Pin|UI_KC1_Pin;
